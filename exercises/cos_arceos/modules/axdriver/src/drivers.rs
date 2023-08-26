@@ -86,7 +86,7 @@ cfg_if::cfg_if! {
         use crate::ixgbe::IxgbeHalImpl;
         use axhal::mem::phys_to_virt;
         pub struct IxgbeDriver;
-        register_net_driver!(IxgbeDriver, driver_net::ixgbe::IxgbeNic<IxgbeHalImpl, 1024, 1>);
+        register_net_driver!(IxgbeDriver, ::ixgbe::IxgbeNic<IxgbeHalImpl, 1024, 1>);
         impl DriverProbe for IxgbeDriver {
             fn probe_pci(
                     root: &mut driver_pci::PciRoot,

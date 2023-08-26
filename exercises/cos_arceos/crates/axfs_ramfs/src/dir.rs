@@ -165,9 +165,43 @@ impl VfsNodeOps for DirNode {
         }
     }
 
-    fn rename(&self, _src: &str, _dst: &str) -> VfsResult {
-        todo!("Implement rename for ramfs!");
+    // fn rename(&self, _src: &str, _dst: &str) -> VfsResult {
+    //     todo!("Implement rename for ramfs!");
+    // }
+
+    fn rename(&self, src: &str, dst: &str) -> VfsResult {
+        log::warn!("rename in ramfs: {} -> {}", src, dst);
+
+        let (src_name, _) = split_path(src);
+        // if src_name == "" || src_name == "." || src_name == ".." || dst == "." || dst == ".." {
+        //     return Err(VfsError::InvalidInput); 
+        // }
+
+        let (dst_parent_path, dst_name) = split_path(dst);
+        let dst_name_str = dst_name.ok_or(VfsError::NotFound)?;
+        // let src_name_str = src_name.ok_or(VfsError::NotFound)?;
+        // if dst_name == "" || dst_name == "." || dst_name == ".." || dst == "." || dst == ".." {
+        //     return Err(VfsError::InvalidInput);
+        // }
+        log::warn!("{}, {}, {}\n", src_name, dst_parent_path, dst_name_str);
+
+        // let subdir = self
+        //                 .children
+        //                 .read()
+        //                 .get(dst_parent_path)
+        //                 .ok_or(VfsError::NotFound)?
+        //                 .clone();
+        log::warn!("!\n");
+        // let node = subdir.remove(src_name).ok();
+        let node = self.children.write().remove(src_name).ok_or(VfsError::NotFound)?;
+        log::warn!("!\n");
+        self.children.write().insert(dst_name_str.into(), node);
+        
+
+
+        Ok(())
     }
+    
 
     axfs_vfs::impl_vfs_dir_default! {}
 }
